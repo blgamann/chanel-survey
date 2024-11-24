@@ -46,6 +46,7 @@ export default function Home() {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState<UserAnswer[]>([]);
   const [questions, setQuestions] = useState<Question[]>([]);
+  const [isCalculating, setIsCalculating] = useState(false);
 
   useEffect(() => {
     const questionArray = Object.entries(cardsData.data)
@@ -68,7 +69,7 @@ export default function Home() {
   const currentQuestion = questions[currentQuestionIndex];
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
 
-  const handleAnswer = (answer: Answer) => {
+  const handleAnswer = async (answer: Answer) => {
     const newAnswer: UserAnswer = {
       cardId: currentQuestion.id,
       answer,
@@ -91,6 +92,8 @@ export default function Home() {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex((prev) => prev + 1);
     } else {
+      setIsCalculating(true);
+      await new Promise((resolve) => setTimeout(resolve, 800));
       const result = calculateResult([...userAnswers, newAnswer]);
       router.push(`/result/${result}`);
     }
@@ -193,10 +196,34 @@ export default function Home() {
 
   const currentAnswer = getCurrentAnswer();
 
+  if (isCalculating) {
+    return (
+      <main className="container mx-auto min-h-screen p-4 flex flex-col items-center justify-center">
+        <Card className="w-full max-w-2xl">
+          <CardHeader>
+            <CardTitle className="text-xl text-center">
+              당신의 결과를 분석하고 있어요
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-8 py-8">
+            <div className="flex justify-center">
+              <div className="animate-pulse flex flex-col items-center gap-4">
+                <div className="w-16 h-16 bg-gray-200 rounded-full" />
+                <div className="h-2 w-48 bg-gray-200 rounded" />
+                <div className="h-2 w-32 bg-gray-200 rounded" />
+              </div>
+            </div>
+            <p className="text-center text-gray-500 text-sm">
+              잠시만 기다려주세요...
+            </p>
+          </CardContent>
+        </Card>
+      </main>
+    );
+  }
+
   return (
     <main className="container mx-auto min-h-screen p-4 flex flex-col items-center justify-center">
-      <h1 className="text-3xl font-bold mb-16">샤넬과 함께 할 당신은?</h1>
-
       <div className="w-full max-w-2xl mb-8">
         <div className="flex justify-between mb-2 text-sm text-gray-500">
           <span>진행률</span>
@@ -270,14 +297,15 @@ export default function Home() {
       </Card>
 
       <div className="flex justify-between w-full max-w-2xl mt-8">
-        <Button
-          variant="outline"
-          className="w-24"
-          onClick={handlePrevious}
-          disabled={currentQuestionIndex === 0}
-        >
-          이전
-        </Button>
+        {currentQuestionIndex > 0 && (
+          <Button
+            variant="outline"
+            className="w-24"
+            onClick={handlePrevious}
+          >
+            이전
+          </Button>
+        )}
       </div>
     </main>
   );

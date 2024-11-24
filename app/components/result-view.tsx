@@ -79,7 +79,10 @@ export function ResultView({ resultType, results }: ResultViewProps) {
 
           <section className="space-y-2" aria-label="성향 설명">
             {result.mainDescription.map((paragraph, index) => (
-              <p key={index} className="text-gray-700 leading-relaxed">
+              <p
+                key={index}
+                className="text-gray-700 leading-relaxed mt-[-20px]"
+              >
                 {paragraph}
               </p>
             ))}
@@ -88,9 +91,6 @@ export function ResultView({ resultType, results }: ResultViewProps) {
           <section className="space-y-4" aria-label="상세 특성">
             <div className="bg-gray-50 p-4 rounded-lg text-center">
               <h2 className="font-medium mb-1 flex items-center justify-center gap-2">
-                <span role="img" aria-hidden="true">
-                  🤝
-                </span>
                 서로 보완할 수 있는 유형
               </h2>
               <p className="text-gray-900 text-lg font-medium">
@@ -100,10 +100,7 @@ export function ResultView({ resultType, results }: ResultViewProps) {
 
             <div className="bg-gray-50 p-4 rounded-lg text-center">
               <h2 className="font-medium mb-3 flex items-center justify-center gap-2">
-                <span role="img" aria-hidden="true">
-                  ✨
-                </span>
-                이런 당신은
+                이런 당신은?
               </h2>
               <div className="grid grid-cols-2 gap-3">
                 {result.traits.map((trait, index) => (
@@ -114,7 +111,7 @@ export function ResultView({ resultType, results }: ResultViewProps) {
                     <span role="img" aria-hidden="true">
                       ✔️
                     </span>
-                    <span className="pl-2 text-gray-700 text-sm">{trait}</span>
+                    <span className="pl-2 text-gray-700 text-xs">{trait}</span>
                   </div>
                 ))}
               </div>
