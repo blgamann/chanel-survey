@@ -62,7 +62,7 @@ export function ResultView({ resultType, results }: ResultViewProps) {
           </CardTitle>
         </CardHeader>
 
-        <CardContent className="space-y-10">
+        <CardContent className="space-y-7">
           <div
             className="relative w-full h-48"
             role="img"
@@ -79,10 +79,7 @@ export function ResultView({ resultType, results }: ResultViewProps) {
 
           <section className="space-y-2" aria-label="성향 설명">
             {result.mainDescription.map((paragraph, index) => (
-              <p
-                key={index}
-                className="text-gray-700 leading-relaxed mt-[-20px]"
-              >
+              <p key={index} className="text-gray-700 leading-relaxed">
                 {paragraph}
               </p>
             ))}
