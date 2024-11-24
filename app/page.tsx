@@ -5,6 +5,16 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useEffect, useState } from "react";
 import cardsData from "@/questions/cards.json";
+import { useRouter } from "next/navigation";
+
+import artGeniusAnswers from "@/answers/art-genius.json";
+import happyCheerAnswers from "@/answers/happy-cheer.json";
+import ideaMakerAnswers from "@/answers/idea-maker.json";
+import kindHelperAnswers from "@/answers/kind-helper.json";
+import curiousObserverAnswers from "@/answers/curious-observer.json";
+import logicalThinkerAnswers from "@/answers/logical-thinker.json";
+import passionateMidfielderAnswers from "@/answers/passionate-midfielder.json";
+import wiseStrategistAnswers from "@/answers/wise-strategist.json";
 
 type Answer = "o" | "x" | "?";
 
@@ -23,11 +33,17 @@ interface Question {
   index: number;
 }
 
+interface AnswerData {
+  cardId: string;
+  answer: Answer;
+  category: string;
+}
+
 export default function Home() {
+  const router = useRouter();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState<UserAnswer[]>([]);
   const [questions, setQuestions] = useState<Question[]>([]);
-  const [isAnswerSelected, setIsAnswerSelected] = useState(false);
 
   useEffect(() => {
     const questionArray = Object.entries(cardsData.data)
@@ -45,8 +61,6 @@ export default function Home() {
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
 
   const handleAnswer = (answer: Answer) => {
-    setIsAnswerSelected(true);
-
     const newAnswer: UserAnswer = {
       cardId: currentQuestion.id,
       answer,
@@ -66,14 +80,12 @@ export default function Home() {
       return [...prev, newAnswer];
     });
 
-    setTimeout(() => {
-      if (currentQuestionIndex < questions.length - 1) {
-        setCurrentQuestionIndex((prev) => prev + 1);
-        setIsAnswerSelected(false);
-      } else {
-        console.log("Survey completed!", userAnswers);
-      }
-    }, 500);
+    if (currentQuestionIndex < questions.length - 1) {
+      setCurrentQuestionIndex((prev) => prev + 1);
+    } else {
+      const result = calculateResult([...userAnswers, newAnswer]);
+      router.push(`/result/${result}`);
+    }
   };
 
   const handlePrevious = () => {
@@ -85,6 +97,88 @@ export default function Home() {
   const getCurrentAnswer = () => {
     return userAnswers.find((answer) => answer.cardId === currentQuestion.id)
       ?.answer;
+  };
+
+  const calculateResult = (answers: UserAnswer[]) => {
+    const scores = {
+      "art-genius": 0,
+      "happy-cheer": 0,
+      "idea-maker": 0,
+      "kind-helper": 0,
+      "curious-observer": 0,
+      "logical-thinker": 0,
+      "passionate-midfielder": 0,
+      "wise-strategist": 0,
+    };
+
+    answers.forEach((answer) => {
+      const userAnswer = answer.answer;
+
+      if (userAnswer === "o") {
+        Object.entries({
+          "art-genius": artGeniusAnswers,
+          "happy-cheer": happyCheerAnswers,
+          "idea-maker": ideaMakerAnswers,
+          "kind-helper": kindHelperAnswers,
+          "curious-observer": curiousObserverAnswers,
+          "logical-thinker": logicalThinkerAnswers,
+          "passionate-midfielder": passionateMidfielderAnswers,
+          "wise-strategist": wiseStrategistAnswers,
+        }).forEach(([type, answerSet]) => {
+          if (
+            (answerSet as AnswerData[]).some(
+              (a) => a.cardId === answer.cardId && a.answer === "o"
+            )
+          ) {
+            scores[type as keyof typeof scores] += 1;
+          }
+        });
+      } else if (userAnswer === "x") {
+        Object.entries({
+          "art-genius": artGeniusAnswers,
+          "happy-cheer": happyCheerAnswers,
+          "idea-maker": ideaMakerAnswers,
+          "kind-helper": kindHelperAnswers,
+          "curious-observer": curiousObserverAnswers,
+          "logical-thinker": logicalThinkerAnswers,
+          "passionate-midfielder": passionateMidfielderAnswers,
+          "wise-strategist": wiseStrategistAnswers,
+        }).forEach(([type, answerSet]) => {
+          if (
+            (answerSet as AnswerData[]).some(
+              (a) => a.cardId === answer.cardId && a.answer === "x"
+            )
+          ) {
+            scores[type as keyof typeof scores] += 1;
+          }
+        });
+      } else if (userAnswer === "?") {
+        Object.entries({
+          "art-genius": artGeniusAnswers,
+          "happy-cheer": happyCheerAnswers,
+          "idea-maker": ideaMakerAnswers,
+          "kind-helper": kindHelperAnswers,
+          "curious-observer": curiousObserverAnswers,
+          "logical-thinker": logicalThinkerAnswers,
+          "passionate-midfielder": passionateMidfielderAnswers,
+          "wise-strategist": wiseStrategistAnswers,
+        }).forEach(([type, answerSet]) => {
+          if (
+            (answerSet as AnswerData[]).some(
+              (a) => a.cardId === answer.cardId && a.answer === "?"
+            )
+          ) {
+            scores[type as keyof typeof scores] += 1;
+          }
+        });
+      }
+    });
+
+    const maxScore = Math.max(...Object.values(scores));
+    const winners = Object.entries(scores).filter(
+      ([_, score]) => score === maxScore
+    );
+    return winners[Math.floor(Math.random() * winners.length)][0];
   };
 
   if (!currentQuestion) return <div>Loading...</div>;
@@ -114,19 +208,16 @@ export default function Home() {
         <CardContent className="space-y-4">
           <Button
             variant={currentAnswer === "o" ? "default" : "outline"}
-            className={`w-full p-6 text-left h-auto whitespace-normal transition-all duration-300 ${
+            className={`w-full p-6 text-left h-auto whitespace-normal ${
               currentAnswer === "o"
                 ? "bg-primary text-primary-foreground"
                 : "hover:bg-gray-100"
-            } ${
-              isAnswerSelected && currentAnswer === "o"
-                ? "scale-[1.02] shadow-lg"
-                : ""
             }`}
             onClick={() => handleAnswer("o")}
-            style={{ 
+            style={{
               WebkitAppearance: "none",
-              backgroundColor: currentAnswer === "o" ? undefined : "transparent"
+              backgroundColor:
+                currentAnswer === "o" ? undefined : "transparent",
             }}
           >
             {currentQuestion.descriptionO}
@@ -135,19 +226,16 @@ export default function Home() {
           {currentQuestion.descriptionDunno && (
             <Button
               variant={currentAnswer === "?" ? "default" : "outline"}
-              className={`w-full p-6 text-left h-auto whitespace-normal transition-all duration-300 ${
+              className={`w-full p-6 text-left h-auto whitespace-normal ${
                 currentAnswer === "?"
                   ? "bg-primary text-primary-foreground"
                   : "hover:bg-gray-100"
-              } ${
-                isAnswerSelected && currentAnswer === "?"
-                  ? "scale-[1.02] shadow-lg"
-                  : ""
               }`}
               onClick={() => handleAnswer("?")}
-              style={{ 
+              style={{
                 WebkitAppearance: "none",
-                backgroundColor: currentAnswer === "?" ? undefined : "transparent"
+                backgroundColor:
+                  currentAnswer === "?" ? undefined : "transparent",
               }}
             >
               {currentQuestion.descriptionDunno}
@@ -156,19 +244,16 @@ export default function Home() {
 
           <Button
             variant={currentAnswer === "x" ? "default" : "outline"}
-            className={`w-full p-6 text-left h-auto whitespace-normal transition-all duration-300 ${
+            className={`w-full p-6 text-left h-auto whitespace-normal ${
               currentAnswer === "x"
                 ? "bg-primary text-primary-foreground"
                 : "hover:bg-gray-100"
-            } ${
-              isAnswerSelected && currentAnswer === "x"
-                ? "scale-[1.02] shadow-lg"
-                : ""
             }`}
             onClick={() => handleAnswer("x")}
-            style={{ 
+            style={{
               WebkitAppearance: "none",
-              backgroundColor: currentAnswer === "x" ? undefined : "transparent"
+              backgroundColor:
+                currentAnswer === "x" ? undefined : "transparent",
             }}
           >
             {currentQuestion.descriptionX}
