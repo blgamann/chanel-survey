@@ -221,85 +221,89 @@ export default function Home() {
   }
 
   return (
-    <main className="container mx-auto min-h-screen p-4 flex flex-col items-center justify-center">
-      <div className="w-full max-w-2xl mb-8">
-        <div className="flex justify-between mb-2 text-sm text-gray-500">
-          <span>진행률</span>
-          <span>
-            {currentQuestionIndex + 1}/{questions.length}
-          </span>
+    <main className="min-h-screen w-full">
+      <div className="fixed top-0 left-0 right-0 z-10 bg-white p-4">
+        <div className="mx-auto w-full max-w-2xl">
+          <div className="flex justify-between mb-2 text-sm text-gray-500">
+            <span>진행률</span>
+            <span>
+              {currentQuestionIndex + 1}/{questions.length}
+            </span>
+          </div>
+          <Progress value={progress} />
         </div>
-        <Progress value={progress} />
       </div>
 
-      <Card className="w-full max-w-2xl">
-        <CardHeader>
-          <CardTitle className="text-xl text-center">
-            {currentQuestion.title}
-          </CardTitle>
-        </CardHeader>
-        <CardContent className="space-y-4">
-          <Button
-            variant={currentAnswer === "o" ? "default" : "outline"}
-            className={`w-full p-6 text-left h-auto whitespace-normal ${
-              currentAnswer === "o"
-                ? "bg-primary text-primary-foreground"
-                : "hover:bg-gray-100"
-            }`}
-            onClick={() => handleAnswer("o")}
-            style={{
-              WebkitAppearance: "none",
-              backgroundColor:
-                currentAnswer === "o" ? undefined : "transparent",
-            }}
-          >
-            {currentQuestion.descriptionO}
-          </Button>
-
-          {currentQuestion.descriptionDunno && (
+      <div className="container mx-auto p-4 flex flex-col items-center justify-center min-h-screen">
+        <Card className="w-full max-w-2xl mt-16">
+          <CardHeader>
+            <CardTitle className="text-xl text-center">
+              {currentQuestion.title}
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
             <Button
-              variant={currentAnswer === "?" ? "default" : "outline"}
+              variant={currentAnswer === "o" ? "default" : "outline"}
               className={`w-full p-6 text-left h-auto whitespace-normal ${
-                currentAnswer === "?"
+                currentAnswer === "o"
                   ? "bg-primary text-primary-foreground"
                   : "hover:bg-gray-100"
               }`}
-              onClick={() => handleAnswer("?")}
+              onClick={() => handleAnswer("o")}
               style={{
                 WebkitAppearance: "none",
                 backgroundColor:
-                  currentAnswer === "?" ? undefined : "transparent",
+                  currentAnswer === "o" ? undefined : "transparent",
               }}
             >
-              {currentQuestion.descriptionDunno}
+              {currentQuestion.descriptionO}
+            </Button>
+
+            {currentQuestion.descriptionDunno && (
+              <Button
+                variant={currentAnswer === "?" ? "default" : "outline"}
+                className={`w-full p-6 text-left h-auto whitespace-normal ${
+                  currentAnswer === "?"
+                    ? "bg-primary text-primary-foreground"
+                    : "hover:bg-gray-100"
+                }`}
+                onClick={() => handleAnswer("?")}
+                style={{
+                  WebkitAppearance: "none",
+                  backgroundColor:
+                    currentAnswer === "?" ? undefined : "transparent",
+                }}
+              >
+                {currentQuestion.descriptionDunno}
+              </Button>
+            )}
+
+            <Button
+              variant={currentAnswer === "x" ? "default" : "outline"}
+              className={`w-full p-6 text-left h-auto whitespace-normal ${
+                currentAnswer === "x"
+                  ? "bg-primary text-primary-foreground"
+                  : "hover:bg-gray-100"
+              }`}
+              onClick={() => handleAnswer("x")}
+              style={{
+                WebkitAppearance: "none",
+                backgroundColor:
+                  currentAnswer === "x" ? undefined : "transparent",
+              }}
+            >
+              {currentQuestion.descriptionX}
+            </Button>
+          </CardContent>
+        </Card>
+
+        <div className="flex justify-between w-full max-w-2xl mt-8">
+          {currentQuestionIndex > 0 && (
+            <Button variant="outline" className="w-24" onClick={handlePrevious}>
+              이전
             </Button>
           )}
-
-          <Button
-            variant={currentAnswer === "x" ? "default" : "outline"}
-            className={`w-full p-6 text-left h-auto whitespace-normal ${
-              currentAnswer === "x"
-                ? "bg-primary text-primary-foreground"
-                : "hover:bg-gray-100"
-            }`}
-            onClick={() => handleAnswer("x")}
-            style={{
-              WebkitAppearance: "none",
-              backgroundColor:
-                currentAnswer === "x" ? undefined : "transparent",
-            }}
-          >
-            {currentQuestion.descriptionX}
-          </Button>
-        </CardContent>
-      </Card>
-
-      <div className="flex justify-between w-full max-w-2xl mt-8">
-        {currentQuestionIndex > 0 && (
-          <Button variant="outline" className="w-24" onClick={handlePrevious}>
-            이전
-          </Button>
-        )}
+        </div>
       </div>
     </main>
   );
