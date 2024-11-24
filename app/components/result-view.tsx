@@ -1,4 +1,13 @@
 import { useRouter } from "next/navigation";
+import Image from "next/image";
+import { Button } from "@/components/ui/button";
+import {
+  Card,
+  CardContent,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 interface ResultViewProps {
   resultType: string;
@@ -6,7 +15,9 @@ interface ResultViewProps {
     [key: string]: {
       description: string;
       image: string[];
-      resultDescription: string;
+      mainDescription: string[];
+      complementaryType: string;
+      traits: string[];
     };
   };
 }
@@ -34,74 +45,101 @@ export function ResultView({ resultType, results }: ResultViewProps) {
   };
 
   return (
-    <main className="container mx-auto min-h-screen p-4 flex flex-col items-center justify-center">
-      <div className="w-full max-w-md flex flex-col items-center">
-        <div className="text-center mb-8">
-          <p className="text-gray-600 mb-2">샤넬과 함께할 당신은</p>
-          <h1 className="text-2xl font-bold">{result.description}</h1>
-        </div>
+    <div className="min-h-screen w-full flex items-center justify-center p-4">
+      <Card
+        className="w-full max-w-md border-0 shadow-none"
+        role="main"
+        aria-labelledby="result-title"
+      >
+        <CardHeader>
+          <CardTitle id="result-title" className="text-center">
+            <span className="block text-xl text-gray-700 font-normal">
+              샤넬과 함께할 당신은
+            </span>
+            <span className="block text-3xl font-extrabold text-gray-900 mt-1">
+              {result.description}
+            </span>
+          </CardTitle>
+        </CardHeader>
 
-        <div className="w-48 h-48 bg-[#5B9BD5] rounded-lg mb-8 flex items-center justify-center">
-          <img
-            src={result.image[0]}
-            alt={result.description}
-            className="w-36 h-36 object-contain"
-          />
-        </div>
-
-        <div className="text-center space-y-6 mb-12 max-w-sm">
-          {result.resultDescription.split("\n\n").map((paragraph, index) => (
-            <p key={index} className="text-gray-700 leading-relaxed">
-              {paragraph}
-            </p>
-          ))}
-        </div>
-
-        <div className="w-full mb-8">
-          <p className="font-medium mb-1">서로 보완할 수 있는 유형</p>
-          <p className="text-[#5B9BD5] mb-6">
-            Encouraging Cheerleader 명랑한 응원가
-          </p>
-
-          <p className="font-medium mb-3">이런 당신은</p>
-          <div className="grid grid-cols-2 gap-y-2">
-            {[
-              "객관적인시선",
-              "호율이최고",
-              "관찰의아이콘",
-              "궁금한게많아요",
-            ].map((trait, index) => (
-              <div key={index} className="flex items-center">
-                <span className="text-[#5B9BD5] mr-2">✓</span>
-                <span className="text-gray-700">{trait}</span>
-              </div>
-            ))}
+        <CardContent className="space-y-10">
+          <div
+            className="relative w-full h-48"
+            role="img"
+            aria-label={`${result.description}를 표현한 이미지`}
+          >
+            <Image
+              src={result.image[0]}
+              alt=""
+              fill
+              className="object-contain rounded-md"
+              priority
+            />
           </div>
-        </div>
 
-        <div className="w-full space-y-3">
-          <button
+          <section className="space-y-2" aria-label="성향 설명">
+            {result.mainDescription.map((paragraph, index) => (
+              <p key={index} className="text-gray-700 leading-relaxed">
+                {paragraph}
+              </p>
+            ))}
+          </section>
+
+          <section className="space-y-4" aria-label="상세 특성">
+            <div className="bg-gray-50 p-4 rounded-lg text-center">
+              <h2 className="font-medium mb-1 flex items-center justify-center gap-2">
+                <span role="img" aria-hidden="true">
+                  🤝
+                </span>
+                서로 보완할 수 있는 유형
+              </h2>
+              <p className="text-gray-900 text-lg font-medium">
+                [{result.complementaryType}]
+              </p>
+            </div>
+
+            <div className="bg-gray-50 p-4 rounded-lg text-center">
+              <h2 className="font-medium mb-3 flex items-center justify-center gap-2">
+                <span role="img" aria-hidden="true">
+                  ✨
+                </span>
+                이런 당신은
+              </h2>
+              <div className="grid grid-cols-2 gap-3">
+                {result.traits.map((trait, index) => (
+                  <div
+                    key={index}
+                    className="flex items-center bg-white px-4 py-3 rounded-md"
+                  >
+                    <span role="img" aria-hidden="true">
+                      ✔️
+                    </span>
+                    <span className="pl-2 text-gray-700 text-sm">{trait}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </section>
+        </CardContent>
+
+        <CardFooter className="flex flex-col gap-2 pt-2">
+          <Button
             onClick={handleShare}
-            className="w-full py-3 bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
+            className="w-full"
+            aria-label="결과 공유하기"
           >
-            다른 테스트 하러가기
-          </button>
-          <button
+            결과 공유하기
+          </Button>
+          <Button
             onClick={() => router.push("/")}
-            className="w-full py-3 text-gray-600 hover:text-gray-800 transition-colors"
+            variant="outline"
+            className="w-full border-0 shadow-none text-gray-400"
+            aria-label="테스트 다시하기"
           >
-            처음부터 다시하기
-          </button>
-        </div>
-
-        <div className="mt-12 opacity-50">
-          <img
-            src="/oxopolitics-logo.png"
-            alt="Powered by OXOPOLITICS"
-            className="h-6"
-          />
-        </div>
-      </div>
-    </main>
+            테스트 다시하기
+          </Button>
+        </CardFooter>
+      </Card>
+    </div>
   );
 }

@@ -15,15 +15,15 @@ export default function StartView({ onStart }: { onStart: () => void }) {
       <Card className="w-full max-w-md border-0 shadow-none" role="main">
         <CardHeader>
           <CardTitle className="text-center">
-            <span className="block text-xl text-gray-700">
+            <span className="block text-xl text-gray-700 font-normal">
               샤넬과 함께할 당신은
             </span>
-            <span className="block text-3xl font-extrabold text-gray-900 mt-2">
+            <span className="block text-3xl font-extrabold text-gray-900 mt-1">
               어떤 유형의 사람일까요?
             </span>
           </CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-10 pt-2">
           <div className="relative w-full h-48">
             <Image
               src="/main.png"
@@ -34,15 +34,17 @@ export default function StartView({ onStart }: { onStart: () => void }) {
               priority
             />
           </div>
-          <div className="flex items-center justify-center gap-1 text-gray-800">
-            <DocumentTextIcon className="w-5 h-5" />
-            <span>32문항</span>
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center justify-center gap-1 text-gray-800">
+              <DocumentTextIcon className="w-5 h-5 mb-1" />
+              <span>32문항</span>
+            </div>
+            <p className="text-center text-sm text-gray-800 font-medium">
+              :: 나와 가장 유사한 답변을 골라주세요 ::
+            </p>
           </div>
-          <p className="text-center text-sm text-gray-800 font-medium">
-            :: 나와 가장 유사한 답변을 골라주세요 ::
-          </p>
         </CardContent>
-        <CardFooter className="flex flex-col items-center space-y-4">
+        <CardFooter className="flex flex-col items-center space-y-2 pt-2">
           <Button
             onClick={onStart}
             className="w-full"
