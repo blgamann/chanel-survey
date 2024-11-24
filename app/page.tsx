@@ -4,17 +4,18 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useEffect, useState } from "react";
-import cardsData from "@/questions/cards.json";
+import cardsData from "@/data/cards.json";
 import { useRouter } from "next/navigation";
 
-import artGeniusAnswers from "@/answers/art-genius.json";
-import happyCheerAnswers from "@/answers/happy-cheer.json";
-import ideaMakerAnswers from "@/answers/idea-maker.json";
-import kindHelperAnswers from "@/answers/kind-helper.json";
-import curiousObserverAnswers from "@/answers/curious-observer.json";
-import logicalThinkerAnswers from "@/answers/logical-thinker.json";
-import passionateMidfielderAnswers from "@/answers/passionate-midfielder.json";
-import wiseStrategistAnswers from "@/answers/wise-strategist.json";
+import artGeniusAnswers from "@/data/answers/art-genius.json";
+import happyCheerAnswers from "@/data/answers/happy-cheer.json";
+import ideaMakerAnswers from "@/data/answers/idea-maker.json";
+import kindHelperAnswers from "@/data/answers/kind-helper.json";
+import curiousObserverAnswers from "@/data/answers/curious-observer.json";
+import logicalThinkerAnswers from "@/data/answers/logical-thinker.json";
+import passionateMidfielderAnswers from "@/data/answers/passionate-midfielder.json";
+import wiseStrategistAnswers from "@/data/answers/wise-strategist.json";
+import StartView from "@/app/components/start-view";
 
 type Answer = "o" | "x" | "?";
 
@@ -41,6 +42,7 @@ interface AnswerData {
 
 export default function Home() {
   const router = useRouter();
+  const [started, setStarted] = useState(false);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [userAnswers, setUserAnswers] = useState<UserAnswer[]>([]);
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -56,6 +58,12 @@ export default function Home() {
 
     setQuestions(questionArray);
   }, []);
+
+  if (!started) {
+    return (
+      <StartView onStart={() => setStarted(true)} participantCount={298} />
+    );
+  }
 
   const currentQuestion = questions[currentQuestionIndex];
   const progress = ((currentQuestionIndex + 1) / questions.length) * 100;

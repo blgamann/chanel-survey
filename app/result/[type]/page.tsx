@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import resultsData from "@/questions/results.json";
+import resultsData from "@/data/results.json";
 import { ResultView } from "@/app/components/result-view";
 
 type ResultType = "art-genius" | "happy-cheer" | "idea-maker" | "kind-helper";
