@@ -61,9 +61,7 @@ export default function Home() {
   }, []);
 
   if (!started) {
-    return (
-      <StartView onStart={() => setStarted(true)} participantCount={298} />
-    );
+    return <StartView onStart={() => setStarted(true)} />;
   }
 
   const currentQuestion = questions[currentQuestionIndex];
@@ -187,7 +185,7 @@ export default function Home() {
 
     const maxScore = Math.max(...Object.values(scores));
     const winners = Object.entries(scores).filter(
-      ([_, score]) => score === maxScore
+      ([, score]) => score === maxScore
     );
     return winners[Math.floor(Math.random() * winners.length)][0];
   };
@@ -298,11 +296,7 @@ export default function Home() {
 
       <div className="flex justify-between w-full max-w-2xl mt-8">
         {currentQuestionIndex > 0 && (
-          <Button
-            variant="outline"
-            className="w-24"
-            onClick={handlePrevious}
-          >
+          <Button variant="outline" className="w-24" onClick={handlePrevious}>
             이전
           </Button>
         )}
