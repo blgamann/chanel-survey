@@ -1,7 +1,13 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+  CardDescription,
+} from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { useEffect, useState } from "react";
 import cardsData from "@/data/cards.json";
@@ -117,7 +123,7 @@ export default function Home() {
                 setUserData({ name: name.trim(), email: email.trim() });
                 setStep("survey");
               }}
-              className="space-y-6"
+              className="space-y-2"
             >
               <div className="space-y-2">
                 <Label htmlFor="name">이름</Label>
@@ -142,10 +148,14 @@ export default function Home() {
                 />
               </div>
               {error && (
-                <p role="alert" className="text-sm text-destructive text-center">
+                <p
+                  role="alert"
+                  className="text-sm text-destructive text-center"
+                >
                   {error}
                 </p>
               )}
+              <div className="h-8"></div>
               <Button type="submit" className="w-full">
                 테스트 시작하기
               </Button>
@@ -163,15 +173,13 @@ export default function Home() {
     if (!userData) return;
 
     try {
-      const { error } = await supabase
-        .from("chanel_survey")
-        .insert({
-          name: userData.name,
-          email: userData.email,
-          result_type: result,
-          answers: answers,
-          submitted_at: new Date().toISOString(),
-        });
+      const { error } = await supabase.from("chanel_survey").insert({
+        name: userData.name,
+        email: userData.email,
+        result_type: result,
+        answers: answers,
+        submitted_at: new Date().toISOString(),
+      });
 
       if (error) {
         console.error("Error inserting data:", error);
@@ -365,10 +373,10 @@ export default function Home() {
           <CardContent className="space-y-4">
             <Button
               variant={currentAnswer === "o" ? "default" : "outline"}
-              className={`w-full p-6 text-left h-auto whitespace-normal ${
+              className={`w-full p-6 text-left h-auto whitespace-normal hover:bg-white touch-none ${
                 currentAnswer === "o"
-                  ? ""
-                  : "hover:bg-muted"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-background"
               }`}
               onClick={() => handleAnswer("o")}
             >
@@ -378,10 +386,10 @@ export default function Home() {
             {currentQuestion.descriptionDunno && (
               <Button
                 variant={currentAnswer === "?" ? "default" : "outline"}
-                className={`w-full p-6 text-left h-auto whitespace-normal ${
+                className={`w-full p-6 text-left h-auto whitespace-normal hover:bg-white touch-none ${
                   currentAnswer === "?"
-                    ? ""
-                    : "hover:bg-muted"
+                    ? "bg-primary text-primary-foreground"
+                    : "bg-background"
                 }`}
                 onClick={() => handleAnswer("?")}
               >
@@ -391,10 +399,10 @@ export default function Home() {
 
             <Button
               variant={currentAnswer === "x" ? "default" : "outline"}
-              className={`w-full p-6 text-left h-auto whitespace-normal ${
+              className={`w-full p-6 text-left h-auto whitespace-normal hover:bg-white touch-none ${
                 currentAnswer === "x"
-                  ? ""
-                  : "hover:bg-muted"
+                  ? "bg-primary text-primary-foreground"
+                  : "bg-background"
               }`}
               onClick={() => handleAnswer("x")}
             >
