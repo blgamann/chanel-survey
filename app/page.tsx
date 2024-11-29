@@ -123,9 +123,9 @@ export default function Home() {
                 setUserData({ name: name.trim(), email: email.trim() });
                 setStep("survey");
               }}
-              className="space-y-2"
+              className="space-y-4"
             >
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <Label htmlFor="name">이름</Label>
                 <Input
                   id="name"
@@ -136,7 +136,7 @@ export default function Home() {
                   aria-required="true"
                 />
               </div>
-              <div className="space-y-2">
+              <div className="space-y-1">
                 <Label htmlFor="email">이메일</Label>
                 <Input
                   id="email"
@@ -155,7 +155,7 @@ export default function Home() {
                   {error}
                 </p>
               )}
-              <div className="h-8"></div>
+              <div className="h-12"></div>
               <Button type="submit" className="w-full">
                 테스트 시작하기
               </Button>
