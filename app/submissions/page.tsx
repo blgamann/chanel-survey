@@ -183,7 +183,7 @@ export default function SubmissionsPage() {
                         {selectedSubmission.email}
                       </p>
                       <p className="text-sm text-muted-foreground mt-1">
-                        결과: {selectedSubmission.result_type}
+                        결과: {results[selectedSubmission.result_type as keyof typeof results]?.description || selectedSubmission.result_type}
                       </p>
                     </div>
                   </div>
