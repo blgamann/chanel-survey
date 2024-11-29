@@ -21,6 +21,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Skeleton } from "@/components/ui/skeleton";
 import { Alert, AlertDescription } from "@/components/ui/alert";
+import results from "@/data/results.json";
 
 interface Submission {
   id: number;
@@ -153,7 +154,10 @@ export default function SubmissionsPage() {
                       ({submission.email})
                     </span>
                   </TableCell>
-                  <TableCell>{submission.result_type}</TableCell>
+                  <TableCell>
+                    {results[submission.result_type as keyof typeof results]
+                      ?.description || submission.result_type}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
