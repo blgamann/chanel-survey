@@ -27,7 +27,7 @@ interface ResultViewProps {
   };
 }
 
-export function ResultView({ resultType, results, userData }: ResultViewProps) {
+export function ResultView({ resultType, results }: ResultViewProps) {
   const { toast } = useToast();
   const result = results[resultType];
   const router = useRouter();

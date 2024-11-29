@@ -51,15 +51,6 @@ interface AnswerData {
 
 type Step = "initial" | "userInfo" | "survey";
 
-interface SurveyResult {
-  userData: {
-    name: string;
-    email: string;
-  };
-  answers: UserAnswer[];
-  result: string;
-}
-
 export default function Home() {
   const router = useRouter();
   const [step, setStep] = useState<Step>("initial");
