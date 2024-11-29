@@ -1,22 +1,28 @@
 "use client";
 
-import { useParams } from "next/navigation";
-import resultsData from "@/data/results.json";
 import { ResultView } from "@/app/components/result-view";
+import results from "@/data/results.json";
+import { useSearchParams } from "next/navigation";
 
-type ResultType = "art-genius" | "happy-cheer" | "idea-maker" | "kind-helper";
+interface Props {
+  params: {
+    type: string;
+  };
+}
 
-export default function ResultPage() {
-  const params = useParams();
-  const resultType = params.type as ResultType;
+export default function ResultPage({ params }: Props) {
+  const searchParams = useSearchParams();
+  const name = searchParams.get("name");
+  const email = searchParams.get("email");
 
-  if (!resultsData[resultType]) {
-    return (
-      <main className="container mx-auto min-h-screen p-4 flex flex-col items-center justify-center">
-        <div className="text-xl">결과를 찾을 수 없습니다.</div>
-      </main>
-    );
-  }
-
-  return <ResultView resultType={resultType} results={resultsData} />;
+  return (
+    <ResultView
+      resultType={params.type}
+      results={results}
+      userData={{
+        name: name || "",
+        email: email || "",
+      }}
+    />
+  );
 }

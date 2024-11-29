@@ -8,6 +8,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { useToast } from "@/hooks/use-toast";
 
 interface ResultViewProps {
   resultType: string;
@@ -20,27 +21,32 @@ interface ResultViewProps {
       traits: string[];
     };
   };
+  userData: {
+    name: string;
+    email: string;
+  };
 }
 
-export function ResultView({ resultType, results }: ResultViewProps) {
+export function ResultView({ resultType, results, userData }: ResultViewProps) {
+  const { toast } = useToast();
   const result = results[resultType];
   const router = useRouter();
   const shareUrl = `${window.location.origin}/result/${resultType}`;
 
   const handleShare = async () => {
     try {
-      if (navigator.share) {
-        await navigator.share({
-          title: "샤넬과 함께 할 당신은?",
-          text: `나의 결과: ${result.description}`,
-          url: shareUrl,
-        });
-      } else {
-        await navigator.clipboard.writeText(shareUrl);
-        alert("링크가 복사되었습니다!");
-      }
+      await navigator.clipboard.writeText(shareUrl);
+      toast({
+        description: "링크가 클립보드에 복사되었습니다.",
+        duration: 2000,
+      });
     } catch (error) {
       console.error("공유 실패:", error);
+      toast({
+        variant: "destructive",
+        description: "링크 복사에 실패했습니다.",
+        duration: 2000,
+      });
     }
   };
 

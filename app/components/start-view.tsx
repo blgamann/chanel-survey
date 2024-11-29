@@ -9,7 +9,11 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 
-export default function StartView({ onStart }: { onStart: () => void }) {
+interface StartViewProps {
+  onStart: () => void;
+}
+
+export default function StartView({ onStart }: StartViewProps) {
   return (
     <div className="min-h-screen w-full flex items-center justify-center p-4">
       <Card className="w-full max-w-md border-0 shadow-none" role="main">
@@ -52,9 +56,6 @@ export default function StartView({ onStart }: { onStart: () => void }) {
           >
             테스트 시작하기
           </Button>
-          <p className="text-sm text-gray-800" aria-live="polite">
-            <strong>298</strong>명이 참여했어요.
-          </p>
         </CardFooter>
       </Card>
     </div>
