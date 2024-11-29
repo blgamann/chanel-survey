@@ -364,9 +364,9 @@ export default function Home() {
           <CardContent className="space-y-4">
             <Button
               variant={currentAnswer === "o" ? "default" : "outline"}
-              className={`w-full p-6 text-left h-auto whitespace-normal hover:bg-white touch-none ${
+              className={`w-full p-6 text-left h-auto whitespace-normal hover:bg-transparent touch-none ${
                 currentAnswer === "o"
-                  ? "bg-primary text-primary-foreground"
+                  ? "bg-primary text-primary-foreground hover:bg-primary"
                   : "bg-background"
               }`}
               onClick={() => handleAnswer("o")}
@@ -377,9 +377,9 @@ export default function Home() {
             {currentQuestion.descriptionDunno && (
               <Button
                 variant={currentAnswer === "?" ? "default" : "outline"}
-                className={`w-full p-6 text-left h-auto whitespace-normal hover:bg-white touch-none ${
+                className={`w-full p-6 text-left h-auto whitespace-normal hover:bg-transparent touch-none ${
                   currentAnswer === "?"
-                    ? "bg-primary text-primary-foreground"
+                    ? "bg-primary text-primary-foreground hover:bg-primary"
                     : "bg-background"
                 }`}
                 onClick={() => handleAnswer("?")}
@@ -390,9 +390,9 @@ export default function Home() {
 
             <Button
               variant={currentAnswer === "x" ? "default" : "outline"}
-              className={`w-full p-6 text-left h-auto whitespace-normal hover:bg-white touch-none ${
+              className={`w-full p-6 text-left h-auto whitespace-normal hover:bg-transparent touch-none ${
                 currentAnswer === "x"
-                  ? "bg-primary text-primary-foreground"
+                  ? "bg-primary text-primary-foreground hover:bg-primary"
                   : "bg-background"
               }`}
               onClick={() => handleAnswer("x")}
